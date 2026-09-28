@@ -1,0 +1,9 @@
+{
+  "version": "2026.09",
+  "examDate": "2027-08（预计）",
+  "subjects": [
+    { "id": "fm", "name": "财务成本管理", "ready": true },
+    { "id": "kj", "name": "会计", "ready": false, "note": "计划 2026 年 12 月上线" },
+    { "id": "zl", "name": "公司战略与风险管理", "ready": false, "note": "计划 2027 年 3 月上线" }
+  ]
+}

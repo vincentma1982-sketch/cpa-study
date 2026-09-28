@@ -1,0 +1,14 @@
+{
+  "name": "CPA 备考学习站",
+  "short_name": "CPA学习",
+  "description": "精简讲义 + 题库 + 间隔复习，进度云端同步",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

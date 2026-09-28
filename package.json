@@ -1,0 +1,9 @@
+{
+  "name": "cpa-study",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CPA 备考学习站 PWA（财管先行）",
+  "scripts": {
+    "dev": "node server.js"
+  }
+}

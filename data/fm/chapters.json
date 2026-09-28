@@ -1,0 +1,26 @@
+{
+  "subject": "财务成本管理",
+  "basedOn": "2026 年考纲体系（近年 20 章结构，待 2027 新大纲发布核对）",
+  "chapters": [
+    { "id": "ch01", "no": 1,  "title": "财务管理基本原理", "weight": "★★", "est": "5h", "status": "ready", "sections": ["1-1", "1-2", "1-3", "1-4"] },
+    { "id": "ch02", "no": 2,  "title": "财务报表分析和财务预测", "weight": "★★★★", "est": "10h", "status": "ready", "sections": ["2-1", "2-2", "2-3", "2-4"] },
+    { "id": "ch03", "no": 3,  "title": "价值评估基础", "weight": "★★★★", "est": "10h", "status": "ready", "sections": ["3-1", "3-2", "3-3"] },
+    { "id": "ch04", "no": 4,  "title": "资本成本", "weight": "★★★★", "est": "8h", "status": "pending", "sections": [] },
+    { "id": "ch05", "no": 5,  "title": "投资项目资本预算", "weight": "★★★★★", "est": "12h", "status": "pending", "sections": [] },
+    { "id": "ch06", "no": 6,  "title": "债券、股票价值评估", "weight": "★★★", "est": "8h", "status": "pending", "sections": [] },
+    { "id": "ch07", "no": 7,  "title": "期权价值评估", "weight": "★★★★", "est": "10h", "status": "pending", "sections": [] },
+    { "id": "ch08", "no": 8,  "title": "企业价值评估", "weight": "★★★★★", "est": "12h", "status": "pending", "sections": [] },
+    { "id": "ch09", "no": 9,  "title": "资本结构", "weight": "★★★", "est": "7h", "status": "pending", "sections": [] },
+    { "id": "ch10", "no": 10, "title": "长期筹资", "weight": "★★★", "est": "8h", "status": "pending", "sections": [] },
+    { "id": "ch11", "no": 11, "title": "股利分配、股票分割与股票回购", "weight": "★★★", "est": "6h", "status": "pending", "sections": [] },
+    { "id": "ch12", "no": 12, "title": "营运资本管理", "weight": "★★★★", "est": "9h", "status": "pending", "sections": [] },
+    { "id": "ch13", "no": 13, "title": "产品成本计算", "weight": "★★★★", "est": "10h", "status": "pending", "sections": [] },
+    { "id": "ch14", "no": 14, "title": "标准成本法", "weight": "★★★", "est": "7h", "status": "pending", "sections": [] },
+    { "id": "ch15", "no": 15, "title": "作业成本法", "weight": "★★★", "est": "7h", "status": "pending", "sections": [] },
+    { "id": "ch16", "no": 16, "title": "本量利分析", "weight": "★★★★★", "est": "10h", "status": "pending", "sections": [] },
+    { "id": "ch17", "no": 17, "title": "短期经营决策", "weight": "★★★", "est": "7h", "status": "pending", "sections": [] },
+    { "id": "ch18", "no": 18, "title": "全面预算", "weight": "★★★", "est": "8h", "status": "pending", "sections": [] },
+    { "id": "ch19", "no": 19, "title": "责任会计", "weight": "★★", "est": "5h", "status": "pending", "sections": [] },
+    { "id": "ch20", "no": 20, "title": "业绩评价", "weight": "★★", "est": "5h", "status": "pending", "sections": [] }
+  ]
+}
