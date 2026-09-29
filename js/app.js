@@ -23,7 +23,8 @@
         else await Views.home(view);
       } catch (e) {
         console.error(e);
-        view.innerHTML = '<div class="empty">页面出错：' + U.esc(e.message) + '</div>';
+        view.innerHTML = '<div class="empty">页面出错：' + U.esc(e.message) +
+          '<br><br><button class="btn" onclick="location.reload()">刷新重试</button></div>';
       }
     },
     refresh() {
