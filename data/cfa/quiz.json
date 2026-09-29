@@ -6,9 +6,14 @@
       "qids": ["c0101", "c0102", "c0103", "c0104"]
     },
     {
-      "id": "set-ci1", "ch": "t-ci", "title": "ESG Integration 案例",
-      "vignette": "Analyst Li Wei is valuing Meridian Chemical, a bulk-chemical producer. Her base-case DCF uses long-term growth of 2.0% and WACC of 8.0%. A new carbon pricing regime, effective 2030, is expected to reduce Meridian's annual operating cash flows by roughly 4%. Approximately 30% of production capacity is located in coastal flood-prone zones. Meridian has published a decarbonization roadmap with capex commitments, and 40% of executive bonuses are tied to emissions targets. The company also issued a 5-year green bond at a yield 25 bp below its conventional bond of similar maturity, ring-fencing proceeds for emissions-reduction projects with annual reporting to investors. Li Wei notes that two sovereign wealth funds on the shareholder register have engaged management on board independence this year.",
-      "qids": ["c0201", "c0202", "c0203", "c0204"]
+      "id": "set-eth1", "ch": "t-ethics", "title": "Analyst Conflicts 分析师冲突案例",
+      "vignette": "David Okafor, CFA, is a senior sell-side analyst at Stellar Securities covering pharmaceutical companies. Stellar's investment banking division is lead underwriter for an upcoming IPO of Helix Pharma, and the banking team has asked Okafor to initiate coverage with a \"constructive\" rating. Helix invites Okafor to a two-day \"research summit\" at a resort, all expenses paid. At the summit, Helix's CFO mentions in a small group session that the FDA review of their lead drug has been completed and approval is expected to be announced next week — this has not been publicly disclosed. Okafor also subscribes to an expert network and interviews a former Helix sales director, who describes routine details of the company's distribution agreements that are not public but are widely understood within the industry. Okafor's preliminary report rates Helix \"buy,\" and he discloses in a footnote that a colleague in his firm owns 200 shares of Helix.",
+      "qids": ["c0501", "c0502", "c0503", "c0504"]
+    },
+    {
+      "id": "set-eth2", "ch": "t-ethics", "title": "PM Conduct 组合经理行为案例",
+      "vignette": "Maria Santos is a portfolio manager at BrightWay Asset Management, overseeing the BW Growth Fund and several separate managed accounts. Santos receives an annual \"consulting fee\" of 30,000 from TekData Corp, a company she frequently recommends to clients, in exchange for quarterly briefings — she has disclosed this arrangement to BrightWay's compliance officer orally. At a client presentation, Santos shows performance of her \"selected strategies,\" which includes only accounts that outperformed their benchmarks, and presents a model portfolio's backtested returns without labeling them as simulated. A subadvisor's trader, Lee, front-runs client orders with his personal account; Santos, who reviews Lee's trading reports monthly, has not acted on several obvious instances because \"trading is not my department.\" Santos's brother-in-law asks her to manage his account; she executes his trades after the BW Growth Fund's orders each day and before notifying individual clients of her recommendation changes.",
+      "qids": ["c0601", "c0602", "c0603", "c0604"]
     }
   ],
   "questions": [
@@ -104,6 +109,119 @@
       ],
       "ans": [0],
       "exp": "Combined Ratio = 71% + 33% = 104% > 100% → 承保亏损 4%，盈利只能靠投资收益支撑（财险公司常见模式，也解释了其利润波动性）。D 的 97.7% 是把 71/（71+33) 之类的错误算法。" },
+    { "id": "c0501", "ch": "t-ethics", "type": "single", "kp": "I(B) Independence and Objectivity 独立与客观",
+      "stem": "The investment banking team's request that Okafor initiate coverage with a \"constructive\" rating most likely places Okafor at risk of violating:",
+      "opts": [
+        "Standard I(B), because accepting the request itself creates a conflict that impairs independence and objectivity",
+        "Standard VI(A), because the banking relationship must be disclosed to clients",
+        "No standard, because a \"constructive\" rating is not explicitly a \"buy\"",
+        "Standard V(C), because the request was not documented in research records"
+      ],
+      "ans": [0],
+      "exp": "投行部施压定评级直接威胁研究的独立客观性，触及 I(B)——接到这种要求本身就是风险信号，照做并发表即违规。B 的披露义务（VI(A)）是次要问题，题目问的是『要求他怎么做』对 Okafor 的直接风险；C 玩文字游戏，constructive=buy 的委婉说法；D 条文错配，记录保存与此无关。" },
+    { "id": "c0502", "ch": "t-ethics", "type": "single", "kp": "II(A) MNPI vs Mosaic Theory",
+      "stem": "With respect to the two information sources at the research summit, Okafor may most appropriately use the:",
+      "opts": [
+        "FDA information but not the distribution details, because FDA approval is the more market-relevant fact",
+        "Distribution details but not the FDA information, because the expert-network channel is a legitimate research source",
+        "Neither, because both were obtained through non-public channels",
+        "Both, because the summit was open to invited analysts"
+      ],
+      "ans": [1],
+      "exp": "判断顺序：先问重大性，不问来源。FDA 审批完成且下周公布=重大非公开信息，不可用（来源是否『合法渠道』不改变 MNPI 属性）。分销协议细节=非公开但非重大（行业普遍理解的常识层面），马赛克理论允许拼贴使用。A 把『市场相关性』当标准，方向恰好反了；C 和 D 都是用来源而非重大性来判断，都是命题人最爱的错误模板。" },
+    { "id": "c0503", "ch": "t-ethics", "type": "single", "kp": "VI(A) Disclosure of Conflicts 利益冲突披露",
+      "stem": "Okafor's footnote disclosure that a colleague owns 200 shares of Helix is:",
+      "opts": [
+        "Sufficient to comply with Standard VI(A)",
+        "Insufficient, because VI(A) requires disclosure of conflicts that might impair his own independence — most notably the underwriting relationship between Helix and his employer",
+        "Insufficient, because all Stellar employees' holdings must be disclosed",
+        "A violation, because analysts may never publish on companies where any employee holds shares"
+      ],
+      "ans": [1],
+      "exp": "披露要完整、显著、及时：同事持仓只是次要冲突，真正的重大冲突是『投行部正在承销 Helix IPO』——这才是影响评级独立性的核心，必须披露。A 的 sufficient 是陷阱词；C 过度扩大披露范围（不要求全体员工持仓）；D 极端化错误项（披露充分即可覆盖，不是禁止）。" },
+    { "id": "c0504", "ch": "t-ethics", "type": "multi", "kp": "I(B) Gifts 礼品与差旅",
+      "stem": "Which of the following actions would allow Okafor to attend the summit without violating Standard I(B)? (Select all that apply)",
+      "opts": [
+        "Declining the offer and instead reviewing Helix's public filings and hosting a follow-up call at Stellar's offices",
+        "Attending only sessions held at Helix's headquarters during normal business hours, paying his own travel and lodging",
+        "Attending the full resort program, disclosing the arrangement to his supervisor after returning",
+        "Attending and reimbursing Helix for the conference fee portion only, since accommodations are incidental"
+      ],
+      "ans": [0, 1],
+      "exp": "A 完全回避——最稳妥。B 商业地点+正常工作时段+自费=客观性不受实质影响，可接受。C 错在两点：豪华度假村全包差旅是典型影响客观的招待（小额象征性才可披露豁免），且事后披露不能事前补救。D 错：自费范围必须覆盖旅行住宿，『conference fee only』等于仍接受赞助。12 版 Handbook 明确：发行人付费的奢华差旅应当拒绝或自费商业标准差旅。" },
+
+    { "id": "c0601", "ch": "t-ethics", "type": "single", "kp": "IV(B) Additional Compensation 额外报酬",
+      "stem": "Santos's consulting arrangement with TekData is:",
+      "opts": [
+        "Acceptable, because she disclosed it to the compliance officer",
+        "A violation of Standard IV(B), because additional compensation arrangements require written consent from both the employer and the paying party",
+        "A violation of Standard VI(C), because referral fees must be disclosed to clients",
+        "Acceptable, because the briefings provide value to both parties"
+      ],
+      "ans": [1],
+      "exp": "额外报酬两大要件：双方（雇主+付款方）+ 书面同意。口头告知合规官≠雇主书面同意，也不构成付款方同意。VI(C) 介绍费要披露给客户——Santos 也没做——但题目问的是安排本身的定性，核心违反 IV(B)。A 的『已披露』忽略书面形式；D『有价值』不改变利益冲突属性——这道题的关键记忆点：口头同意永远是错误项。" },
+    { "id": "c0602", "ch": "t-ethics", "type": "single", "kp": "III(D) Performance Presentation 业绩呈现",
+      "stem": "Santos's client presentation most likely violates Standard III(D) because:",
+      "opts": [
+        "She presented returns of only the accounts that outperformed, and presented simulated returns without labeling",
+        "She included separate managed accounts alongside the BW Growth Fund",
+        "She presented returns net of fees without also showing gross returns",
+        "She failed to obtain GIPS verification for the BW Growth Fund"
+      ],
+      "ans": [0],
+      "exp": "III(D) 三宗罪本题记了两个：cherry-picking（只报跑赢的组合，违反公平准确完整）+ 模拟业绩未标注。B 没错——不同账户可以合并展示；C 无此要求（净费口径是更保守的合规做法，并不要求双口径）；D 陷阱：GIPS 是自愿标准，未验证不违规，只有『宣称合规却不合规』才违规。GIPS/III(D) 的『自愿但说到做到』是每年必考分界线。" },
+    { "id": "c0603", "ch": "t-ethics", "type": "single", "kp": "IV(C) Responsibilities of Supervisors 督导责任",
+      "stem": "Santos's inaction regarding Lee's front-running is best described as:",
+      "opts": [
+        "Not a violation, because trading reports were reviewed monthly",
+        "Not a violation, because front-running is a trading desk matter outside her responsibilities",
+        "A violation of Standard IV(C), because supervisors who detect violations must initiate compliance procedures rather than ignore them",
+        "A violation of Standard III(B), because client orders were not treated fairly"
+      ],
+      "ans": [2],
+      "exp": "IV(C) 的核心：主管『知道或应当知道』下属违规就有义务行动——定期看到报告=应当知道。『不是我的部门』正是 Handbook 点名的推诿话术。A 把『看过报告』当『履职』；B 把职责范围窄化；D 条文错配：Lee 的 front-running 损害的是客户利益，但 Santos 的不作为违反的是她对下属行为的督导责任（IV(C)），III(B) 不是针对主管不作为的条款。识别『谁违反了哪条』时，先分清行为主体：Lee 违反 VI(B)/受托责任，Santos 违反 IV(C)。" },
+    { "id": "c0604", "ch": "t-ethics", "type": "multi", "kp": "III(B) Fair Dealing + VI(B) Priority of Transactions",
+      "stem": "Regarding Santos's handling of her brother-in-law's account and client notifications, which statements are correct? (Select all that apply)",
+      "opts": [
+        "Treating the brother-in-law's account as a client account for trading priority purposes is appropriate",
+        "Executing her brother-in-law's orders after the fund but before notifying individual clients violates both III(B) and VI(B)",
+        "Notifying clients of recommendation changes at different times is acceptable if all eventually receive the information",
+        "Her own personal account transactions should occur before family members' accounts"
+      ],
+      "ans": [0, 1],
+      "exp": "A 对：家庭成员账户视同客户账户，优先级在雇主和自己之前。B 对：荐股变更通知发完（含家人视同的客户）之前先给家人成交——既不公平对待客户（III(B)，信息必须同步传达）也违反交易次序（VI(B)，客户>雇主>自己）。C 错：『最终都会知道』不成立，公平要求同步传达，时间差本身就是违规。D 错：自己排最后，家人视同客户排在自己前面。" },
+
+    { "id": "c0701", "ch": "t-ethics", "type": "single", "kp": "III(C) Suitability 适合性",
+      "stem": "An adviser recommends a high-yield bond fund to a 70-year-old retired client who described her objectives as \"capital preservation with steady income\" and moderate risk tolerance. The fund's prospectus states it may invest up to 80% in CCC-rated bonds. The adviser did not update the client's IPS before the purchase. The adviser's conduct most likely violates:",
+      "opts": [
+        "Standard III(C) only",
+        "Standard III(A) only",
+        "Both III(A) and III(C)",
+        "No standard, because the fund's risk is disclosed in its prospectus"
+      ],
+      "ans": [2],
+      "exp": "双违规：III(C)——没更新 IPS 就推荐、标的与『资本保全+中等风险』不匹配；III(A)——审慎义务要求推荐前确保适合，同一事实同时踩两条是 Ethics 题的常见正确项。D 是经典陷阱：披露风险≠免除适合性义务，『客户签过风险揭示书』从来不是免责理由。" },
+    { "id": "c0702", "ch": "t-ethics", "type": "single", "kp": "VII(B) Reference to CFA Designation 头衔使用",
+      "stem": "Three statements appear in investment advisers' marketing materials. Which one complies with Standard VII(B)?",
+      "opts": [
+        "\"As a CFA Level II candidate, Zhang is uniquely qualified to manage your portfolio\"",
+        "\"Our team includes three CFA charterholders with an average of 10 years' experience\"",
+        "\"Having passed the CFA exams, Li is certified by CFA Institute as an expert analyst\"",
+        "\"Enroll now to become a CFA in just two years\""
+      ],
+      "ans": [1],
+      "exp": "VII(B) 口诀：事实性陈述可以，夸大暗示不行。B 是纯事实（持证人数+年限）。A 错在『uniquely qualified』暗示 CFA 授予独家资格；C 错在 CFA Institute 不『认证专家』——charterholder 是会员状态不是能力认证；D 错在『CFA』不能当名词指代持证人/暗示速成。另外 D 还暗示了时间承诺。考点变体：考后讨论具体考题违反 VII(A) 而不是 VII(B)，别混。" },
+    { "id": "c0703", "ch": "t-ethics", "type": "single", "kp": "I(A) Knowledge of the Law 知法守法",
+      "stem": "An analyst discovers that her firm's new structured product marketing materials understate fees in a way that violates local securities regulations. Local law is silent on whether employees must report such violations internally. The analyst's first action under Standard I(A) should be to:",
+      "opts": [
+        "Publicly disclose the violation to the press to protect investors",
+        "Resign immediately to dissociate from the violation",
+        "Seek to dissociate from the activity and follow firm compliance procedures, escalating within the firm and to regulators if required",
+        "Do nothing further, because she was not involved in preparing the materials"
+      ],
+      "ans": [2],
+      "exp": "I(A) 的处置阶梯：脱离（dissociate）→ 按合规程序内部升级 → 法律要求时上报监管。立即辞职（B）和公开曝光（A）都是过度反应型错误项——Standards 只要求 dissociate，不要求牺牲职业；D 是反应不足型。『只脱离不报告』是否够？关键看法律是否强制报告，题目说法律沉默，则内部合规程序即可。记住处置阶梯比记单点动作更重要。" },
+
     { "id": "c0401", "ch": "t-ci", "type": "single", "kp": "Free Cash Flow Hypothesis 自由现金流假说",
       "stem": "According to the free cash flow hypothesis (Jensen), a mature firm with large stable free cash flows and few growth opportunities should most likely:",
       "opts": [

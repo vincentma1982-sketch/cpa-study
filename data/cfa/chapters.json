@@ -2,8 +2,8 @@
   "subject": "CFA Level II",
   "basedOn": "2027 考纲（CFA Institute 2026/05/26 发布；较 2026 版仅 Ethics 重组为每准则独立模块，其余科目内容与权重不变）",
   "chapters": [
-    { "id": "t-ethics", "no": 1, "title": "Ethical and Professional Standards 道德与职业行为标准", "weight": "10–15%", "est": "15h", "status": "pending", "sections": [],
-      "outline": ["Code & Standards 总览", "Standard I Professionalism（2027 新独立模块）", "Standards II–VII 各准则模块", "Ethics Application 综合案例"] },
+    { "id": "t-ethics", "no": 1, "title": "Ethical and Professional Standards 道德与职业行为标准", "weight": "10–15%", "est": "15h", "status": "ready", "sections": ["eth-frame", "eth-s12", "eth-s34", "eth-s567"],
+      "outline": ["Code & Standards 框架 + 四步答题法 ✓", "Standard I Professionalism ✓", "Standard II Integrity of Capital Markets ✓", "Standard III Duties to Clients ✓", "Standard IV Duties to Employers ✓", "Standard V Investment Analysis ✓", "Standard VI Conflicts of Interest ✓", "Standard VII CFA Member/Candidate ✓", "Ethics Application 综合案例（含于各节例题与题库）"] },
     { "id": "t-quant", "no": 2, "title": "Quantitative Methods 数量方法", "weight": "5–10%", "est": "18h", "status": "pending", "sections": [],
       "outline": ["Multiple Regression – Basics", "Multiple Regression – Advanced", "Violations of Regression Assumptions 假设违背", "Extensions of Multiple Regression", "Time-series Analysis 时间序列", "Machine Learning 机器学习", "Big Data Projects"] },
     { "id": "t-eco", "no": 3, "title": "Economics 经济学", "weight": "5–10%", "est": "10h", "status": "pending", "sections": [],
