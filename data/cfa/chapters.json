@@ -4,8 +4,8 @@
   "chapters": [
     { "id": "t-ethics", "no": 1, "title": "Ethical and Professional Standards 道德与职业行为标准", "weight": "10–15%", "est": "15h", "status": "ready", "sections": ["eth-frame", "eth-s12", "eth-s34", "eth-s567"],
       "outline": ["Code & Standards 框架 + 四步答题法 ✓", "Standard I Professionalism ✓", "Standard II Integrity of Capital Markets ✓", "Standard III Duties to Clients ✓", "Standard IV Duties to Employers ✓", "Standard V Investment Analysis ✓", "Standard VI Conflicts of Interest ✓", "Standard VII CFA Member/Candidate ✓", "Ethics Application 综合案例（含于各节例题与题库）"] },
-    { "id": "t-quant", "no": 2, "title": "Quantitative Methods 数量方法", "weight": "5–10%", "est": "18h", "status": "pending", "sections": [],
-      "outline": ["Multiple Regression – Basics", "Multiple Regression – Advanced", "Violations of Regression Assumptions 假设违背", "Extensions of Multiple Regression", "Time-series Analysis 时间序列", "Machine Learning 机器学习", "Big Data Projects"] },
+    { "id": "t-quant", "no": 2, "title": "Quantitative Methods 数量方法", "weight": "5–10%", "est": "18h", "status": "ready", "sections": ["q-reg", "q-issues", "q-ts", "q-ml"],
+      "outline": ["Multiple Regression – Basics 基础推断 ✓", "Multiple Regression – Advanced 进阶 ✓", "Violations of Assumptions 假设违背诊断 ✓", "Extensions of Regression 回归拓展（log/dummy，含于精读）", "Time-series Analysis 时间序列 ✓", "Machine Learning 机器学习 ✓", "Big Data Projects 大数据项目 ✓"] },
     { "id": "t-eco", "no": 3, "title": "Economics 经济学", "weight": "5–10%", "est": "10h", "status": "pending", "sections": [],
       "outline": ["Currency Exchange Rates 汇率与平价关系", "Economic Growth 经济增长（增长核算）"] },
     { "id": "t-fsa", "no": 4, "title": "Financial Statement Analysis 财务报告分析", "weight": "10–15%", "est": "12h", "status": "ready", "sections": ["fsa-qfr", "fsa-fia"],

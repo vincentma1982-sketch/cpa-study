@@ -6,6 +6,11 @@
       "qids": ["c0101", "c0102", "c0103", "c0104"]
     },
     {
+      "id": "set-ci1", "ch": "t-ci", "title": "ESG Integration 案例",
+      "vignette": "Analyst Li Wei is valuing Meridian Chemical, a bulk-chemical producer. Her base-case DCF uses long-term growth of 2.0% and WACC of 8.0%. A new carbon pricing regime, effective 2030, is expected to reduce Meridian's annual operating cash flows by roughly 4%. Approximately 30% of production capacity is located in coastal flood-prone zones. Meridian has published a decarbonization roadmap with capex commitments, and 40% of executive bonuses are tied to emissions targets. The company also issued a 5-year green bond at a yield 25 bp below its conventional bond of similar maturity, ring-fencing proceeds for emissions-reduction projects with annual reporting to investors. Li Wei notes that two sovereign wealth funds on the shareholder register have engaged management on board independence this year.",
+      "qids": ["c0201", "c0202", "c0203", "c0204"]
+    },
+    {
       "id": "set-eth1", "ch": "t-ethics", "title": "Analyst Conflicts 分析师冲突案例",
       "vignette": "David Okafor, CFA, is a senior sell-side analyst at Stellar Securities covering pharmaceutical companies. Stellar's investment banking division is lead underwriter for an upcoming IPO of Helix Pharma, and the banking team has asked Okafor to initiate coverage with a \"constructive\" rating. Helix invites Okafor to a two-day \"research summit\" at a resort, all expenses paid. At the summit, Helix's CFO mentions in a small group session that the FDA review of their lead drug has been completed and approval is expected to be announced next week — this has not been publicly disclosed. Okafor also subscribes to an expert network and interviews a former Helix sales director, who describes routine details of the company's distribution agreements that are not public but are widely understood within the industry. Okafor's preliminary report rates Helix \"buy,\" and he discloses in a footnote that a colleague in his firm owns 200 shares of Helix.",
       "qids": ["c0501", "c0502", "c0503", "c0504"]
@@ -14,6 +19,16 @@
       "id": "set-eth2", "ch": "t-ethics", "title": "PM Conduct 组合经理行为案例",
       "vignette": "Maria Santos is a portfolio manager at BrightWay Asset Management, overseeing the BW Growth Fund and several separate managed accounts. Santos receives an annual \"consulting fee\" of 30,000 from TekData Corp, a company she frequently recommends to clients, in exchange for quarterly briefings — she has disclosed this arrangement to BrightWay's compliance officer orally. At a client presentation, Santos shows performance of her \"selected strategies,\" which includes only accounts that outperformed their benchmarks, and presents a model portfolio's backtested returns without labeling them as simulated. A subadvisor's trader, Lee, front-runs client orders with his personal account; Santos, who reviews Lee's trading reports monthly, has not acted on several obvious instances because \"trading is not my department.\" Santos's brother-in-law asks her to manage his account; she executes his trades after the BW Growth Fund's orders each day and before notifying individual clients of her recommendation changes.",
       "qids": ["c0601", "c0602", "c0603", "c0604"]
+    },
+    {
+      "id": "set-quant1", "ch": "t-quant", "title": "Regression Diagnostics 回归诊断案例",
+      "vignette": "An analyst regresses a stock's monthly excess returns on three factors using 60 months of data:\n\n        Excess Return = 2.5 + 0.80·MKT − 0.30·SIZE + 1.20·EARN + ε\n        (standard errors)        (0.20)   (0.15)   (1.00)\n\nSST = 500, SSE = 320. EARN is a dummy equal to 1 in earnings-surprise months. A colleague fits a second model dropping EARN, obtaining SSE = 337 and adjusted R² of 0.331. The residual plot against fitted values shows a funnel shape widening to the right, and the Durbin-Watson statistic is 1.8. (Critical t ≈ 2.0 at 5%.)",
+      "qids": ["c0801", "c0802", "c0803", "c0804"]
+    },
+    {
+      "id": "set-quant2", "ch": "t-quant", "title": "Forecasting & ML 预测与机器学习案例",
+      "vignette": "A fund builds forecasting tools. Project A models log(revenue) of a SaaS firm on a time trend over 40 quarters: ln(Rev) = 4.2 + 0.031·t, R² = 0.96; an ADF test on the log-revenue series fails to reject a unit root. Project B regresses the price levels of two trending crypto tokens on each other, obtaining R² = 0.91 and a t-statistic of 22; the residual Durbin-Watson is 0.4; both price series have unit roots, and an Engle-Granger test on the residuals also fails to reject a unit root. Project C uses 300 candidate variables to predict corporate bond defaults with only 9 years of annual data; the trained classifier achieves 98.5% accuracy on the training sample but 66% on out-of-sample data.",
+      "qids": ["c0901", "c0902", "c0903", "c0904"]
     }
   ],
   "questions": [
@@ -221,6 +236,124 @@
       ],
       "ans": [2],
       "exp": "I(A) 的处置阶梯：脱离（dissociate）→ 按合规程序内部升级 → 法律要求时上报监管。立即辞职（B）和公开曝光（A）都是过度反应型错误项——Standards 只要求 dissociate，不要求牺牲职业；D 是反应不足型。『只脱离不报告』是否够？关键看法律是否强制报告，题目说法律沉默，则内部合规程序即可。记住处置阶梯比记单点动作更重要。" },
+
+    { "id": "c0801", "ch": "t-quant", "type": "single", "kp": "Adjusted R² 与变量取舍",
+      "stem": "The colleague's model without EARN is preferred over the full model primarily because:",
+      "opts": [
+        "Its R² is higher than the full model's R²",
+        "Its adjusted R² (0.331) exceeds the full model's adjusted R² (0.326), since EARN's t-statistic is insignificant",
+        "Its SSE of 337 is lower than the full model's SSE of 320",
+        "Removing a dummy variable always improves a regression"
+      ],
+      "ans": [1],
+      "exp": "全模型：R²=1−320/500=0.36，Adj R²=1−0.64×59/56=0.326。EARN 的 t=1.2/1.0=1.2 不显著，剔除非显著变量使 Adj R² 从 0.326 升到 0.331——惩罚项减小的收益超过 SSE 微增的损失。A 方向错误：R² 必然下降（0.36→1−337/500=0.326）；C 算术反了（337>320）；D『always』是陷阱词。比较不同变量个数的模型只看 Adj R²。" },
+    { "id": "c0802", "ch": "t-quant", "type": "single", "kp": "t 检验与 F 检验分工",
+      "stem": "Regarding the significance of the full model, the analyst should conclude that:",
+      "opts": [
+        "The model is insignificant because the dummy variable EARN is not statistically significant",
+        "The model is significant overall, because F = (180/3)/(320/56) ≈ 10.5, even though one individual coefficient is insignificant",
+        "The model is insignificant because t(MKT) = 4.0 exceeds t(SIZE) = −2.0",
+        "No conclusion is possible without the critical F value"
+      ],
+      "ans": [1],
+      "exp": "F = MSR/MSE = [(500−320)/3]/[320/56] = 60/5.71 ≈ 10.5，远超临界值 → 模型整体显著。局部不显著（EARN）与整体显著可以同时成立——这正是 F 和 t 检验回答不同问题的意义。A 把个体检验结论推广到整体；C 比较两个 t 值没有意义；D 拖延型错误项，F≈10.5 在任何常规临界值下都显著。" },
+    { "id": "c0803", "ch": "t-quant", "type": "single", "kp": "Dummy Variable 解释",
+      "stem": "Holding MKT and SIZE constant, the coefficient on EARN (1.20) most likely means that:",
+      "opts": [
+        "Earnings-surprise months add 1.20% to the stock's return on average, all else equal",
+        "An earnings surprise causes the stock to rise by 1.20% in the following month",
+        "EARN explains 1.20% of the variance of returns",
+        "The return is 1.20 in earnings months regardless of MKT and SIZE"
+      ],
+      "ans": [0],
+      "exp": "Dummy 系数的正确读法：其他变量不变时，EARN=1 的月份平均回报高出 1.20（单位与 y 一致，题为百分比收益）。B 把相关当因果（回归不识别因果）；C 把系数当方差解释率（那是 R² 的语言）；D 丢掉『其他变量不变』且『regardless』极端化。系数解释三要素：数值+单位+条件——缺一不可。" },
+    { "id": "c0804", "ch": "t-quant", "type": "multi", "kp": "假设违背诊断",
+      "stem": "Based on the funnel-shaped residual plot and DW = 1.8, which diagnoses are correct? (Select all that apply)",
+      "opts": [
+        "The funnel shape indicates heteroskedasticity, making the reported t-statistics unreliable",
+        "DW = 1.8 implies approximately no first-order serial correlation, so no correction is needed for autocorrelation",
+        "Heteroskedasticity biases the regression coefficients",
+        "The appropriate remedy for the heteroskedasticity is White-corrected (robust) standard errors"
+      ],
+      "ans": [0, 1, 3],
+      "exp": "A 对：残差漏斗=异方差，后果是标准误失真、t/F 不可靠（系数仍无偏一致）。B 对：DW≈2(1−r)，DW=1.8 → r≈0.1，接近 0，无显著一阶自相关。C 错：异方差不伤系数、只伤推断——『伤系数还是伤标准误』是诊断题第一刀。D 对：异方差的标准修正就是 White 稳健标准误（或 GLS）。多选题的『全选看似合理项』模式：用 C 这种概念性错误做排除锚。" },
+
+    { "id": "c0901", "ch": "t-quant", "type": "single", "kp": "Log-linear Trend Model 增长率解读",
+      "stem": "In Project A, the coefficient 0.031 on the time trend indicates that the company's revenue has grown at an average rate closest to:",
+      "opts": ["0.31% per quarter", "3.1% per quarter", "31% per quarter", "3.1% per year"],
+      "ans": [1],
+      "exp": "Log-linear 模型 ln(y)=b₀+b₁t 中，b₁×100 = 每期恒定百分比增长率 → 0.031×100 = 3.1%/季度。A 是小数点错位陷阱；C 是单位混淆；D 把季度当年度——季度 3.1% 复利年化约 13%，别顺手换算，题目问什么答什么。R²=0.96 在这里只是陪衬，且 log 变换后 R² 不可与线性模型直接比。" },
+    { "id": "c0902", "ch": "t-quant", "type": "single", "kp": "Unit Root 与伪回归",
+      "stem": "Project B's high R² and t-statistic are best described as:",
+      "opts": [
+        "Evidence of a strong short-term trading signal",
+        "A spurious regression, because both series have unit roots and the residuals are also non-stationary (no cointegration)",
+        "A valid long-term hedge relationship",
+        "Evidence that at least one series is stationary"
+      ],
+      "ans": [1],
+      "exp": "双单位根序列回归 + 残差仍非平稳（EG 检验不拒绝单位根）→ 无协整 → 伪回归。DW=0.4 极低 + R²=0.91 是非平稳回归的指纹。正确流程：各测 ADF（均为 I(1)）→ EG 残差检验 → 不协整则回归无意义。A『short-term signal』从无意义的回归里变不出信号；C『valid hedge』需要协整支撑；D 与题给条件矛盾。Project A 同样 ADF 不拒绝——但 A 是单序列趋势建模（可用差分或趋势模型），不犯伪回归错误。" },
+    { "id": "c0903", "ch": "t-quant", "type": "single", "kp": "Overfitting 与正则化",
+      "stem": "Project C's drop from 98.5% training accuracy to 66% out-of-sample is most directly explained by:",
+      "opts": [
+        "High bias, which requires a more complex model",
+        "High variance (overfitting), which regularization such as LASSO is designed to mitigate",
+        "Heteroskedasticity in the candidate variables",
+        "An error in the test set labels"
+      ],
+      "ans": [1],
+      "exp": "训练 98.5% vs 样本外 66% = 教科书式过拟合（高方差）：300 个变量 vs 9 个年度观测，模型把噪声当规律。LASSO 的 L1 惩罚把不重要系数压零，天然适配这种『变量远超观测』的场景。A 方向反了——高偏差（欠拟合）的表现是训练测试误差双高；C 是回归假设问题，与分类器泛化无关；D 无依据脑补。" },
+    { "id": "c0904", "ch": "t-quant", "type": "single", "kp": "集成方法选择 Bagging vs Boosting",
+      "stem": "To reduce Project C's variance problem while keeping the model structure tree-based, the most appropriate ensemble method is:",
+      "opts": [
+        "Boosting, because it sequentially corrects classification errors",
+        "Bagging with random feature subsets (random forest), because averaging many low-correlation trees reduces variance",
+        "Stacking, because it combines heterogeneous model types",
+        "Adding a time trend to each decision tree"
+      ],
+      "ans": [1],
+      "exp": "药方要对症：问题是高方差 → bagging（并行自助抽样+投票）专门降方差；随机森林再加随机特征子集降低树间相关性，是标准答案。Boosting 主要降偏差、且可能加剧对噪声的敏感（此处不适用）；C stacking 是组合异质模型，与『tree-based 保持结构』矛盾；D 把回归概念生搬到分类树。记忆钩子：Bagging=并行降方差，Boosting=串行降偏差。" },
+
+    { "id": "c1001", "ch": "t-quant", "type": "single", "kp": "Multicollinearity 症状识别",
+      "stem": "A regression's F-statistic is highly significant, yet none of the four individual slope coefficients is significant. The most likely explanation is:",
+      "opts": [
+        "Heteroskedasticity in the residuals",
+        "Serial correlation in the residuals",
+        "Multicollinearity among the independent variables",
+        "A misspecified intercept"
+      ],
+      "ans": [2],
+      "exp": "『整体显著 + 个体全蔫』是多重共线性的招牌症状：变量间高度相关使系数标准误膨胀，t 检验假阴性增多，但联合信息仍让 F 显著。异方差/序列相关的招牌在残差图和 DW 上，不制造这种『F 与 t 背离』。D 与显著性模式无关。若题目再给一个 VIF=8，即可确诊。" },
+    { "id": "c1002", "ch": "t-quant", "type": "single", "kp": "ARCH 波动聚类",
+      "stem": "An analyst finds that a regression's residuals have constant mean and variance, but large residuals tend to cluster in certain periods. An ARCH(1) test on squared residuals is significant. The most appropriate conclusion and action are:",
+      "opts": [
+        "The model is misspecified; add more independent variables",
+        "Mean forecasts are still valid, but prediction intervals are understated; use a GARCH model to capture the time-varying variance",
+        "The coefficients are biased; apply generalized least squares",
+        "Serial correlation is present; use the Durbin-Watson statistic"
+      ],
+      "ans": [1],
+      "exp": "ARCH 的考点层级：① 识别——大波动聚类 + 对残差平方的 ARCH 检验显著；② 后果——均值方程的预测和系数不受影响（无偏仍成立），但常数方差假设错了，置信/预测区间偏窄；③ 修正——GARCH 建模时变方差。A 把 ARCH 当模型设定错误；C 说『系数有偏』错（ARCH 伤的是区间不是点估计）；D 张冠李戴——ARCH 与自相关是不同问题。" },
+    { "id": "c1003", "ch": "t-quant", "type": "single", "kp": "Big Data 文本处理流程",
+      "stem": "A firm wants to classify analyst reports as positive or negative on a company. The correctly ordered text-processing pipeline is:",
+      "opts": [
+        "Tokenization → cleansing (remove stop words, lemmatize) → normalize → feature extraction (bag of words / TF-IDF)",
+        "Feature extraction → tokenization → cleansing → normalize",
+        "Cleansing → feature extraction → tokenization → normalize",
+        "Normalize → feature extraction → cleansing → tokenization"
+      ],
+      "ans": [0],
+      "exp": "固定顺序题：先把句子切成词（tokenization），再清洗（去停用词、词形还原），然后标准化，最后才做向量化特征提取（词袋/TF-IDF，进阶用词嵌入）。顺序题的记忆锚：『没有词就没有词袋』——特征提取永远在最后。监管文件的 NLP 应用（如 SEC filing 情感打分）用的就是这条流水线。" },
+    { "id": "c1004", "ch": "t-quant", "type": "single", "kp": "遗漏变量与函数形式",
+      "stem": "Which of the following regression problems biases the coefficient estimates themselves (not merely the standard errors)?",
+      "opts": [
+        "Heteroskedasticity",
+        "Positive serial correlation",
+        "Omitting a variable that is correlated with both the dependent variable and an included regressor",
+        "Multicollinearity among regressors"
+      ],
+      "ans": [2],
+      "exp": "四大经典问题里，只有遗漏相关变量（且与已含变量相关）让系数有偏且不一致——遗漏变量的影响被『塞进』相关变量的系数里。异方差、序列相关、多重共线性都只伤标准误，系数保持无偏（前两者还一致）。这道题是『伤系数 vs 伤标准误』框架的反向考法，记住唯一答案：遗漏变量/形式错误。" },
 
     { "id": "c0401", "ch": "t-ci", "type": "single", "kp": "Free Cash Flow Hypothesis 自由现金流假说",
       "stem": "According to the free cash flow hypothesis (Jensen), a mature firm with large stable free cash flows and few growth opportunities should most likely:",
