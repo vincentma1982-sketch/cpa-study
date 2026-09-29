@@ -1,0 +1,68 @@
+{
+  "id": "t-fsa",
+  "title": "Financial Statement Analysis 财务报告分析",
+  "intro": "本科目 6 个模块中，公司间投资（Intercorporate Investments）、跨国经营（Multinational Operations）、雇员薪酬（Employee Compensation）与您正在学的 CPA《会计》（长期股权投资/合并报表、外币折算、股份支付与养老金）高度重叠——这部分搭 CPA 的车即可，本单元不重复讲解。这里只讲两块 CPA 完全没有的增量：①财报质量分析（考试的绝对核心）②金融机构分析（银行/保险的特殊分析框架）。建议先学 CPA 长投后再回来做对应题目。",
+  "sections": [
+    {
+      "id": "fsa-qfr",
+      "title": "Quality of Financial Reports 财报质量",
+      "blocks": [
+        { "t": "kp", "h": "先分清两个不同的『质量』：报告质量（Reporting Quality）回答'报表是否如实反映了经济现实'，盈利质量（Earnings Quality）回答'利润本身是否有含金量、可持续'。分析时先评估报告质量（数据可不可信），再评估盈利质量（值不值得给高估值）。" },
+        { "t": "table", "head": ["", "高盈利质量", "低盈利质量"], "rows": [
+          ["高报告质量", "理想公司：如实报告 + 利润可持续", "诚实但平庸：不赚钱，至少不骗人"],
+          ["低报告质量", "最危险：利润好但是粉饰出来的", "又差又造假，退市边缘"]
+        ]},
+        { "t": "term", "en": "Aggressive / Conservative Accounting", "cn": "激进/稳健会计政策选择：在准则允许范围内提前确认收入、推迟确认费用即激进；反之稳健。激进≠造假（Fraudulent），但激进是粉饰的起点。" },
+        { "t": "p", "h": "收入端红旗（Revenue Red Flags）——案例题最爱：" },
+        { "t": "ul", "items": [
+          "应收账款增速持续超过收入增速（客户付款意愿 = 收入质量的投票）；",
+          "Channel Stuffing 压货：期末向渠道塞货确认收入，下期退货暴增；",
+          "Bill-and-Hold 开票留货：货还没发就确认收入；",
+          "总额法/净额法（Gross vs. Net）：Principal（委托人）按总额确认收入，Agent（代理人）只按佣金净额确认——收入换会计准则口径能'变大'但利润不变；",
+          "退货权/保修条款突变、信用政策突然放宽配合收入冲量。"
+        ]},
+        { "t": "term", "en": "Channel Stuffing", "cn": "压货：期末向分销商过量发货确认收入。识别信号：应收天数拉长 + 存货在渠道积压 + 下年初退货/折让上升。" },
+        { "t": "term", "en": "Bill-and-Hold", "cn": "开票留货：买方已付款开票但卖方仍持有货物。准则要求满足严格条件才可确认收入，是经典操纵手法。" },
+        { "t": "p", "h": "费用端红旗：" },
+        { "t": "ul", "items": [
+          "费用资本化比例异常上升（研发/软件利息都'变资产'）；",
+          "Cookie Jar Reserves 甜饼罐准备：景气年份多提减值和准备（藏利润），不景气年份转回（放利润）——看费用率是否随景气反常波动；",
+          "Big Bath 大洗澡：换管理层/并购当年把亏损一次性做巨，为以后年度'轻装上阵'；",
+          "应计/递延项目余额单边累积（deferred 只增不减）。"
+        ]},
+        { "t": "term", "en": "Cookie Jar Reserves", "cn": "甜饼罐储备：丰年多提费用藏利润、歉年转回释放利润，平滑业绩。识别：准备金余额与收入/应收的比率异常波动。" },
+        { "t": "term", "en": "Big Bath", "cn": "大洗澡：在业绩已经差的年份一次性确认巨额减值/损失，压低当期基数、抬高未来年度利润。" },
+        { "t": "kp", "h": "现金流检验法：利润可以被会计政策修饰，经营现金流（CFO）难得多。NI 很高而 CFO 长期偏低，说明利润停留在应收账款和资本化资产里——含金量低。看 CFO/NI 比率是否持续 ≥1 附近。" },
+        { "t": "formula", "h": "Accruals Ratio (Cash-flow) = (NI − CFO − CFI) ÷ Average NOA\nAccruals Ratio (Balance-sheet) = (NOA_t − NOA_t−1) ÷ Average NOA", "note": "NOA = 净经营资产（Net Operating Assets）。应计比率越高，说明利润中'还没变成现金'的部分越多，盈利质量越可疑。通常 >10% 就要追问，考试常给数据让计算并下结论。" },
+        { "t": "tip", "h": "案例题的判断顺序：先报告质量（数据可信吗？）→ 再盈利质量（可持续吗？）→ 最后才是估值调整。跳过报告质量直接调估值是常见错误选项。" },
+        { "t": "example", "title": "Accruals Ratio 实战（一题打通本单元）", "q": "BioStar 公司本年净利润 320 百万，经营现金流 176 百万，投资现金流 −90 百万（含资本开支）。年初净经营资产 640 百万，年末 760 百万。用两种方法计算应计比率并评价盈利质量。", "steps": [
+          "平均 NOA = (640+760)/2 = 700 百万",
+          "现金流法：(320 − 176 − (−90)) / 700 = 234/700 = 33.4%",
+          "资产负债表法：(760−640)/700 = 120/700 = 17.1%",
+          "两法口径不同（现金流法含投资性应计），但同向：利润中约 1/5~1/3 是未变现的应计项目，明显高于 10% 警戒水平",
+          "结论：盈利质量偏低，应进一步查应收增速、资本化政策和 CFO/NI 比率"
+        ], "a": "考场技巧：算完比率必须落回'这意味着什么'——CFA 二级案例题 4 问里通常第 1 问计算、第 2-4 问都是基于计算结果的判断。" }
+      ]
+    },
+    {
+      "id": "fsa-fia",
+      "title": "Financial Institutions Analysis 金融机构分析",
+      "blocks": [
+        { "t": "p", "h": "分析银行和工商业公司完全不同，原因有四：①高杠杆经营（银行天然负债率 90%+，不能用普通资产负债率吓自己）；②受监管资本约束（资本充足率决定能放多少贷款）；③资产端以贷款为主，信用风险集中；④收入核心是利差，费用和拨备都可操纵利润。" },
+        { "t": "kp", "h": "银行分析三支柱：资本充足（Capital Adequacy）→ 流动性（Liquidity）→ 资产质量（Asset Quality），再加盈利能力和估值。顺序别乱：资本和流动性是'能不能活'，资产质量是'利润真不真'。" },
+        { "t": "formula", "h": "CET1 Ratio = Common Equity Tier 1 ÷ Risk-Weighted Assets (RWA)\nTotal Capital Ratio = (CET1 + Additional Tier 1 + Tier 2) ÷ RWA", "note": "巴塞尔框架：RWA 风险加权资产按资产风险大小加权。普通股一级资本（CET1）是最高质量资本。比率低于监管最低要求（如 CET1 4.5%+缓冲）会限制分红和业务扩张。" },
+        { "t": "term", "en": "Risk-Weighted Assets (RWA)", "cn": "风险加权资产：按信用/市场/操作风险加权后的资产总额。同样 100 亿资产，贷款多→RWA 高→资本要求多。" },
+        { "t": "formula", "h": "LCR = High-Quality Liquid Assets ÷ Net Cash Outflows (30天) ≥ 100%\nNSFR = Available Stable Funding ÷ Required Stable Funding ≥ 100%", "note": "LCR 流动性覆盖率管'短期 30 天挤兑能不能扛'；NSFR 净稳定资金比例管'长期资产负债期限错配'。" },
+        { "t": "formula", "h": "NPL Ratio = Non-Performing Loans ÷ Gross Loans\nProvision Coverage = Loan Loss Reserves ÷ NPL", "note": "不良贷款率看资产质量，拨备覆盖率看'为坏账准备得够不够'。中国上市银行拨备覆盖率监管要求 120%-150%，高拨备=利润蓄水池。" },
+        { "t": "term", "en": "Net Interest Margin (NIM)", "cn": "净息差 =（利息收入 − 利息支出）÷ 平均生息资产。银行最核心的盈利能力指标，相当于制造业的毛利率。" },
+        { "t": "formula", "h": "Efficiency Ratio (Cost/Income) = Non-Interest Expense ÷ (Net Interest Income + Non-Interest Income)", "note": "越低越好：60% 表示每 1 元收入花 0.6 元运营成本。注意分子不含信用减值损失。" },
+        { "t": "kp", "h": "保险公司只看一个核心比率：Combined Ratio 综合成本率 = Loss Ratio + Expense Ratio。承保利润 = 1 − Combined Ratio。<100% 承保赚钱，>100% 靠投资收益硬撑（财险公司常见陷阱）。" },
+        { "t": "example", "title": "三家公司一分钟体检（串联银行+保险指标）", "q": "A 银行：CET1 12.1%，NPL 1.5%，拨备覆盖率 280%，NIM 2.1%，成本收入比 58%。B 银行：CET1 9.8%，NPL 3.2%，拨备覆盖率 120%，NIM 1.6%，成本收入比 72%。C 财险：Combined Ratio 104%。快速排序三家公司质量并给一句话理由。", "steps": [
+          "A：资本厚、不良低、拨备足（还藏了利润）、息差和效率都好 → 最优",
+          "B：资本薄+不良高+拨备贴线（利润蓄水池浅）+息差窄 → 风险最高",
+          "C：承保本身亏损 4%，盈利完全依赖投资收益 → 质量取决于投资端，波动性大"
+        ], "a": "这组数字是真实上市银行的典型量级（A≈招行，B≈弱资质城商行）。记住量级比记住公式更重要——案例题给数据时，'像谁'能帮您秒判断。" }
+      ]
+    }
+  ]
+}

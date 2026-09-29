@@ -1,0 +1,26 @@
+{
+  "subject": "CFA Level II",
+  "basedOn": "2027 考纲（CFA Institute 2026/05/26 发布；较 2026 版仅 Ethics 重组为每准则独立模块，其余科目内容与权重不变）",
+  "chapters": [
+    { "id": "t-ethics", "no": 1, "title": "Ethical and Professional Standards 道德与职业行为标准", "weight": "10–15%", "est": "15h", "status": "pending", "sections": [],
+      "outline": ["Code & Standards 总览", "Standard I Professionalism（2027 新独立模块）", "Standards II–VII 各准则模块", "Ethics Application 综合案例"] },
+    { "id": "t-quant", "no": 2, "title": "Quantitative Methods 数量方法", "weight": "5–10%", "est": "18h", "status": "pending", "sections": [],
+      "outline": ["Multiple Regression – Basics", "Multiple Regression – Advanced", "Violations of Regression Assumptions 假设违背", "Extensions of Multiple Regression", "Time-series Analysis 时间序列", "Machine Learning 机器学习", "Big Data Projects"] },
+    { "id": "t-eco", "no": 3, "title": "Economics 经济学", "weight": "5–10%", "est": "10h", "status": "pending", "sections": [],
+      "outline": ["Currency Exchange Rates 汇率与平价关系", "Economic Growth 经济增长（增长核算）"] },
+    { "id": "t-fsa", "no": 4, "title": "Financial Statement Analysis 财务报告分析", "weight": "10–15%", "est": "12h", "status": "ready", "sections": ["fsa-qfr", "fsa-fia"],
+      "outline": ["Intercorporate Investments 公司间投资", "Employee Compensation 雇员薪酬（养老金/股份支付）", "Multinational Operations 跨国经营", "Financial Institutions Analysis 金融机构分析 ✓", "Quality of Financial Reports 财报质量 ✓", "FSA Techniques 分析技术"] },
+    { "id": "t-ci", "no": 5, "title": "Corporate Finance 公司金融", "weight": "5–10%", "est": "8h", "status": "ready", "sections": ["ci-esg", "ci-div"],
+      "outline": ["Dividends & Share Repurchases 分红与回购（CFA 视角）✓", "ESG in Investment Analysis ESG 投资分析 ✓", "Cost of Capital 资本成本（搭 CPA 财管第4章的车）", "Corporate Restructuring 公司重组"] },
+    { "id": "t-eq", "no": 6, "title": "Equity 权益投资", "weight": "10–15%", "est": "20h", "status": "pending", "sections": [],
+      "outline": ["Equity Valuation – Basics 估值框架", "Dividend Discount Models 股利贴现", "Free Cash Flow Models 自由现金流模型", "Multiplier Models 乘数模型", "Residual Income Models 剩余收益模型", "Valuation of Private Companies 非上市公司估值"] },
+    { "id": "t-fi", "no": 7, "title": "Fixed Income 固定收益", "weight": "10–15%", "est": "20h", "status": "pending", "sections": [],
+      "outline": ["Term Structure 利率期限结构", "Arbitrage-free Valuation 无套利估值", "Bonds with Embedded Options 含权债券", "Credit Analysis Models 信用分析模型", "Credit Default Swaps 信用违约互换"] },
+    { "id": "t-der", "no": 8, "title": "Derivatives 衍生品", "weight": "5–10%", "est": "12h", "status": "pending", "sections": [],
+      "outline": ["Forward Commitments 远期承诺定价与估值", "Contingent Claims 或有索取权（期权）"] },
+    { "id": "t-alt", "no": 9, "title": "Alternative Investments 另类投资", "weight": "5–10%", "est": "10h", "status": "pending", "sections": [],
+      "outline": ["Commodities 大宗商品", "Real Estate Types 房地产类型", "Public Real Estate 公募房地产（REITs）", "Hedge Fund Strategies 对冲基金策略"] },
+    { "id": "t-pm", "no": 10, "title": "Portfolio Construction 组合构建", "weight": "10–15%", "est": "15h", "status": "pending", "sections": [],
+      "outline": ["ETF 交易型开放式指数基金", "Multifactor Models 多因子模型", "Measuring & Managing Market Risk 市场风险管理", "Backtesting & Simulation 回测与模拟", "Economics & Investment Markets 宏观与投资市场", "Active Portfolio Management 主动管理"] }
+  ]
+}

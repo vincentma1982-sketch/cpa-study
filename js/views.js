@@ -1,8 +1,18 @@
-/* ===== views.js：全部页面视图 ===== */
+/* ===== views.js：全部页面视图（多科目 + Item Set 案例题） ===== */
 (function () {
   'use strict';
   const Views = {};
-  const FM = 'fm'; // 当前已就绪科目：财务成本管理
+
+  /* ---------- 当前科目 ---------- */
+  function subj() {
+    const s = Store.state.data.settings;
+    return (s && s.subject) || 'fm';
+  }
+  function setSubj(id) {
+    Store.state.data.settings.subject = id;
+    Store.state.data.settings._t = Date.now();
+    Store.saveLocal();
+  }
 
   /* ---------- 通用 ---------- */
   function blockHtml(b) {
@@ -16,6 +26,7 @@
       case 'tip': return '<div class="tip"><span class="tip-tag">💡 提示</span> ' + e(b.h) + '</div>';
       case 'trap': return '<div class="trap"><span class="trap-tag">⚠️ 易错</span> ' + e(b.h) + '</div>';
       case 'mnem': return '<div class="mnem"><span class="mnem-tag">🧠 口诀</span> ' + e(b.h) + '</div>';
+      case 'term': return '<div class="term"><div class="term-en">' + e(b.en) + '</div><div class="term-cn">' + e(b.cn) + '</div></div>';
       case 'table':
         return '<table class="data"><thead><tr>' + b.head.map((h) => '<th>' + e(h) + '</th>').join('') +
           '</tr></thead><tbody>' + b.rows.map((r) => '<tr>' + r.map((c) => '<td>' + e(c) + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
@@ -45,62 +56,82 @@
   /* ---------- 首页 ---------- */
   Views.home = async function (view) {
     const idx = await Data.index();
-    const chs = await Data.chapters(FM);
+    const s = subj();
+    const group = idx.groups.find((g) => g.subjects.some((x) => x.id === s)) || idx.groups[0];
+    const subject = group.subjects.find((x) => x.id === s) || group.subjects[0];
+    const chs = await Data.chapters(subject.id);
     const read = Store.state.data.read;
     const quizStats = Store.state.data.quiz;
     const totalQ = Object.keys(quizStats).length;
-    const okQ = Object.values(quizStats).reduce((s, q) => s + q.ok, 0);
-    const nQ = Object.values(quizStats).reduce((s, q) => s + q.n, 0);
+    const okN = Object.values(quizStats).reduce((x, q) => x + q.ok, 0);
+    const nN = Object.values(quizStats).reduce((x, q) => x + q.n, 0);
 
     const readyChs = chs.chapters.filter((c) => c.status === 'ready');
-    const readSecs = readyChs.reduce((s, c) => s + c.sections.filter((id) => read[id]).length, 0);
-    const totalSecs = readyChs.reduce((s, c) => s + c.sections.length, 0);
+    const readSecs = readyChs.reduce((x, c) => x + c.sections.filter((id) => read[id]).length, 0);
+    const totalSecs = readyChs.reduce((x, c) => x + c.sections.length, 0);
     const doneChs = readyChs.filter((c) => c.sections.every((id) => read[id])).length;
 
-    let h = '<h2 class="view-title">2027 考期 · ' + U.esc(idx.subjects[0].name) + '</h2>';
-    h += '<div class="stat-grid">' +
-      '<div class="stat"><b>' + doneChs + '/' + readyChs.length + '</b><span>章节完成</span></div>' +
-      '<div class="stat"><b>' + (totalSecs ? Math.round(readSecs / totalSecs * 100) : 0) + '%</b><span>知识点进度</span></div>' +
-      '<div class="stat"><b>' + Store.streak() + '天</b><span>连续学习</span></div>' +
-      '<div class="stat"><b>' + totalQ + '</b><span>做过题目</span></div>' +
-      '<div class="stat"><b>' + (nQ ? Math.round(okQ / nQ * 100) : 0) + '%</b><span>累计正确率</span></div>' +
-      '<div class="stat"><b>' + SRS.dueCount() + '</b><span>待复习</span></div>' +
-      '</div>';
+    let h = '';
+    // 科目组切换
+    h += '<div class="grp-row">' + idx.groups.map((g) =>
+      '<button class="grp-pill' + (g.id === group.id ? ' on' : '') + '" data-g="' + g.id + '">' + U.esc(g.name) + '</button>'
+    ).join('') + '</div>';
+
+    h += '<h2 class="view-title">' + U.esc(subject.name) + (subject.exam ? ' · ' + U.esc(subject.exam) : '') + '</h2>';
+    if (readyChs.length) {
+      h += '<div class="stat-grid">' +
+        '<div class="stat"><b>' + doneChs + '/' + readyChs.length + '</b><span>单元完成</span></div>' +
+        '<div class="stat"><b>' + (totalSecs ? Math.round(readSecs / totalSecs * 100) : 0) + '%</b><span>知识点进度</span></div>' +
+        '<div class="stat"><b>' + Store.streak() + '天</b><span>连续学习</span></div>' +
+        '<div class="stat"><b>' + totalQ + '</b><span>做过题目</span></div>' +
+        '<div class="stat"><b>' + (nN ? Math.round(okN / nN * 100) : 0) + '%</b><span>累计正确率</span></div>' +
+        '<div class="stat"><b>' + SRS.dueCount() + '</b><span>待复习</span></div>' +
+        '</div>';
+    }
 
     for (const c of chs.chapters) {
       const done = c.sections.filter((id) => read[id]).length;
       const pct = c.sections.length ? Math.round(done / c.sections.length * 100) : 0;
-      h += '<a href="#/ch/' + c.id + '" class="card ch-item" style="text-decoration:none;color:inherit">' +
+      const inner =
         '<div class="ch-no">' + (c.no < 10 ? '0' + c.no : c.no) + '</div>' +
         '<div class="ch-main"><div class="ch-title">' + U.esc(c.title) + '</div>' +
         '<div class="ch-meta">权重 ' + c.weight + ' · 建议 ' + c.est + (c.sections.length ? ' · 知识点 ' + done + '/' + c.sections.length : '') + '</div>' +
-        (c.status === 'ready' ? '<div class="pbar"><i style="width:' + pct + '%"></i></div>' : '') +
+        (c.status === 'ready'
+          ? '<div class="pbar"><i style="width:' + pct + '%"></i></div>'
+          : (c.outline && c.outline.length ? '<div class="ch-meta">📋 ' + c.outline.length + ' 个考点单元：' + c.outline.slice(0, 3).map(U.esc).join('；') + (c.outline.length > 3 ? '…' : '') + '</div>' : '')) +
         '</div>' +
-        '<span class="ch-status' + (c.status === 'ready' ? '' : ' pending') + '">' + (c.status === 'ready' ? '学习' : '制作中') + '</span></a>';
+        '<span class="ch-status' + (c.status === 'ready' ? '' : ' pending') + '">' + (c.status === 'ready' ? '学习' : '制作中') + '</span>';
+      h += c.status === 'ready'
+        ? '<a href="#/ch/' + c.id + '" class="card ch-item" style="text-decoration:none;color:inherit">' + inner + '</a>'
+        : '<div class="card ch-item">' + inner + '</div>';
     }
 
-    h += '<div class="card small muted">📌 科目规划：<b>2027 考会计 + 财管 + 战略</b>。财管已就绪，会计/战略内容将按计划陆续上线（见"计划"页）。</div>';
+    const pending = group.subjects.filter((x) => !x.ready);
+    if (pending.length) {
+      h += '<div class="card small muted">📌 规划中：' + pending.map((x) => U.esc(x.name) + '（' + U.esc(x.note || '筹备中') + '）').join('；') + '</div>';
+    }
     view.innerHTML = h;
+    U.$$('.grp-pill', view).forEach((p) => p.addEventListener('click', () => {
+      const g = idx.groups.find((x) => x.id === p.dataset.g);
+      if (g) { setSubj(g.subjects[0].id); Views.home(view); }
+    }));
   };
 
   /* ---------- 阅读器 ---------- */
   Views.reader = async function (view, chId) {
-    const ch = await Data.chapter(FM, chId);
+    const ch = await Data.chapter(subj(), chId);
     const read = Store.state.data.read;
     let h = '<a class="back" href="#/">← 返回目录</a>' +
-      '<h2 class="view-title">第' + ch.no + '章 ' + U.esc(ch.title) + '</h2>' +
+      '<h2 class="view-title">' + U.esc(ch.title) + '</h2>' +
       (ch.intro ? '<div class="card small">' + U.esc(ch.intro) + '</div>' : '');
-
     for (const sec of ch.sections) {
       const done = !!read[sec.id];
       h += '<div class="reader-sec' + (done ? ' done' : '') + '" id="sec-' + sec.id + '"><h2>' + U.esc(sec.title) + '</h2></div>';
       h += sec.blocks.map(blockHtml).join('');
     }
-    h += '<div class="card small muted" style="text-align:center">—— 本章完 · 进度已自动保存 ——</div>';
+    h += '<div class="card small muted" style="text-align:center">—— 本单元完 · 进度已自动保存 ——</div>';
     view.innerHTML = h;
     bindBlocks(view);
-
-    // 滚动到可视区的小节自动标记已读
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
         if (en.isIntersecting) {
@@ -111,70 +142,105 @@
           }
         }
       });
-    }, { threshold: 0.4 });
+    }, { threshold: 0.35 });
     U.$$('.reader-sec', view).forEach((el) => io.observe(el));
   };
 
   /* ---------- 题库首页 ---------- */
   Views.quizHome = async function (view) {
-    const chs = await Data.chapters(FM);
-    const quiz = await Data.quiz(FM);
-    const cnt = {};
-    quiz.questions.forEach((q) => { cnt[q.ch] = (cnt[q.ch] || 0) + 1; });
+    const s = subj();
+    const chs = await Data.chapters(s);
+    const quiz = await Data.quiz(s);
+    const allQ = quiz.questions;
+    const setQids = new Set((quiz.sets || []).flatMap((x) => x.qids));
+    const cnt = {}, scnt = {};
+    allQ.forEach((q) => { cnt[q.ch] = (cnt[q.ch] || 0) + 1; });
+    (quiz.sets || []).forEach((x) => { scnt[x.ch] = (scnt[x.ch] || 0) + 1; });
     const due = SRS.dueCount();
     const stats = Store.state.data.quiz;
 
     let h = '<h2 class="view-title">题库练习</h2>';
     h += '<div class="card">' +
-      '<h3>🧪 错题重练（间隔复习队列）</h3>' +
-      '<div class="small muted">按遗忘曲线自动安排，到点才会出现。</div>' +
-      '<div class="btn-row"><a class="btn ' + (due ? '' : 'btn-ghost') + '" href="#/quiz/run?mode=wrong">' + (due ? '开始复习（' + due + ' 题）' : '今日无待复习') + '</a></div>' +
-      '</div>';
+      '<h3>📄 案例题（Item Set）训练</h3>' +
+      '<div class="small muted">CFA 二级考试形式：一篇英文案例 + 4 道选择题。先读案例再作答，练的就是考场节奏。</div>' +
+      '<div class="btn-row"><a class="btn btn-ghost" href="#/quiz/run?mode=sets">今日案例组（' + (quiz.sets || []).length + ' 组）</a></div></div>';
     h += '<div class="card">' +
-      '<h3>⚡ 随机快练</h3><div class="small muted">跨章节抽 10 题，保持题感。</div>' +
+      '<h3>🧪 错题重练（间隔复习队列）</h3>' +
+      '<div class="btn-row"><a class="btn ' + (due ? '' : 'btn-ghost') + '" href="#/quiz/run?mode=wrong">' + (due ? '开始复习（' + due + ' 题）' : '今日无待复习') + '</a></div></div>';
+    h += '<div class="card">' +
+      '<h3>⚡ 随机快练</h3><div class="small muted">抽 10 题保持题感。</div>' +
       '<div class="btn-row"><a class="btn btn-ghost" href="#/quiz/run?mode=random">来 10 题</a></div></div>';
-    h += '<div class="card"><h3>📚 章节练习</h3>';
+    h += '<div class="card"><h3>📚 分单元练习</h3>';
     for (const c of chs.chapters) {
-      const n = cnt[c.id] || 0;
-      if (!n) continue;
-      const doneIds = quiz.questions.filter((q) => q.ch === c.id && stats[q.id]);
-      const okN = doneIds.reduce((s, q) => s + (stats[q.id] && stats[q.id].ok ? 1 : 0), 0);
+      const n = cnt[c.id] || 0, ns = scnt[c.id] || 0;
+      if (!n && !ns) continue;
+      const doneIds = allQ.filter((q) => q.ch === c.id && stats[q.id]);
+      const okN = doneIds.reduce((x, q) => x + (stats[q.id] && stats[q.id].ok ? 1 : 0), 0);
       h += '<a href="#/quiz/run?mode=ch&ch=' + c.id + '" class="ch-item" style="text-decoration:none;color:inherit;border-bottom:1px solid var(--line)">' +
         '<div class="ch-main"><div class="ch-title small">' + c.no + '. ' + U.esc(c.title) + '</div>' +
-        '<div class="ch-meta">' + n + ' 题 · 已做 ' + doneIds.length + ' · 答对 ' + okN + '</div></div>' +
+        '<div class="ch-meta">' + (ns ? ns + ' 组案例题 + ' : '') + n + ' 道独立题 · 已做 ' + doneIds.length + ' · 答对 ' + okN + '</div></div>' +
         '<span class="ch-status">练习</span></a>';
     }
     h += '</div>';
     view.innerHTML = h;
   };
 
-  /* ---------- 做题 ---------- */
+  /* ---------- 做题（含 Item Set） ---------- */
   Views.quizRun = async function (view, params) {
     const mode = params.get('mode') || 'ch';
-    const quiz = await Data.quiz(FM);
+    const quiz = await Data.quiz(subj());
     const all = quiz.questions;
-    let list = [];
-    if (mode === 'ch') {
+    const qmap = {};
+    all.forEach((q) => { qmap[q.id] = q; });
+    const sets = quiz.sets || [];
+
+    // 构建做题序列：案例组 {kind:'set'} 或单题 {kind:'q'}
+    let items = [];
+    if (mode === 'sets') {
+      items = sets.map((st) => ({ kind: 'set', set: st, qs: st.qids.map((id) => qmap[id]).filter(Boolean) }));
+    } else if (mode === 'ch') {
       const ch = params.get('ch');
-      list = all.filter((q) => q.ch === ch);
+      const inSet = new Set(sets.filter((st) => st.ch === ch).flatMap((st) => st.qids));
+      sets.filter((st) => st.ch === ch).forEach((st) => items.push({ kind: 'set', set: st, qs: st.qids.map((id) => qmap[id]).filter(Boolean) }));
+      all.filter((q) => q.ch === ch && !inSet.has(q.id)).forEach((q) => items.push({ kind: 'q', q }));
     } else if (mode === 'wrong') {
       const ids = new Set(SRS.due().filter((i) => i.startsWith('q:')).map((i) => i.slice(2)));
-      list = all.filter((q) => ids.has(q.id));
+      all.filter((q) => ids.has(q.id)).forEach((q) => items.push({ kind: 'q', q }));
     } else {
-      list = all.slice().sort(() => Math.random() - 0.5).slice(0, 10);
+      all.slice().sort(() => Math.random() - Math.random()).slice(0, 10).forEach((q) => items.push({ kind: 'q', q }));
     }
-    if (!list.length) { view.innerHTML = '<a class="back" href="#/quiz">← 返回题库</a><div class="empty">没有可练习的题目</div>'; return; }
+    if (!items.length) { view.innerHTML = '<a class="back" href="#/quiz">← 返回题库</a><div class="empty">没有可练习的题目</div>'; return; }
 
-    let cur = 0, rightN = 0, wrongIds = [];
-    const sel = new Set();
+    let idx = 0, sub = 0;          // items 指针、组内指针
+    let rightN = 0, totalN = 0, wrongIds = [];
+    let vignetteSeen = false;
+
+    function curItem() { return items[idx]; }
+
+    function renderSetIntro() {
+      const it = curItem();
+      let h = '<a class="back" href="#/quiz">← 退出</a>' +
+        '<div class="quiz-meta">案例题 ' + (idx + 1) + ' / ' + items.length + ' · ' + U.esc(it.set.title) + ' · 共 ' + it.qs.length + ' 问</div>' +
+        '<div class="vignette"><div class="vignette-tag">📄 Vignette · 案例（建议 4 分钟读完）</div>' + U.esc(it.set.vignette) + '</div>' +
+        '<div class="btn-row"><button class="btn btn-block" id="start-set">读完了，开始作答</button></div>';
+      view.innerHTML = h;
+      U.$('#start-set', view).addEventListener('click', () => { sub = 0; renderQ(); });
+    }
 
     function renderQ() {
-      const q = list[cur];
-      sel.clear();
+      const it = curItem();
+      const totalInItem = it.kind === 'set' ? it.qs.length : 1;
+      const q = it.kind === 'set' ? it.qs[sub] : it.q;
+      if (!q) { nextItem(); return; }
       const multi = q.type === 'multi';
-      let h = '<a class="back" href="#/quiz">← 退出</a>' +
-        '<div class="quiz-meta">第 ' + (cur + 1) + ' / ' + list.length + ' 题 · ' + (multi ? '多选题' : '单选题') + ' · ' + U.esc(q.kp || '') + '</div>' +
-        '<div class="quiz-stem">' + U.esc(q.stem) + '</div>';
+      const sel = new Set();
+      let h = '<a class="back" href="#/quiz">← 退出</a>';
+      if (it.kind === 'set') {
+        h += '<div class="quiz-meta">案例 ' + (idx + 1) + '/' + items.length + ' · 第 ' + (sub + 1) + '/' + totalInItem + ' 问 · ' + (multi ? '多选' : '单选') + '</div>';
+      } else {
+        h += '<div class="quiz-meta">第 ' + (idx + 1) + ' / ' + items.length + ' 题 · ' + (multi ? '多选题' : '单选题') + '</div>';
+      }
+      h += '<div class="quiz-stem">' + U.esc(q.stem) + '</div>';
       q.opts.forEach((o, i) => {
         h += '<div class="opt" data-i="' + i + '"><span class="opt-key">' + 'ABCDEF'[i] + '</span><span>' + U.esc(o) + '</span></div>';
       });
@@ -185,6 +251,18 @@
       const opts = U.$$('.opt', view);
       let submitted = false;
 
+      function finishItemOrNext() {
+        if (it.kind === 'set' && sub + 1 < totalInItem) { sub++; renderQ(); }
+        else nextItem();
+      }
+      function nextItem() {
+        idx++;
+        if (idx < items.length) {
+          vignetteSeen = false;
+          if (items[idx].kind === 'set') renderSetIntro(); else renderQ();
+        } else renderEnd();
+      }
+
       function submit() {
         if (submitted) return;
         submitted = true;
@@ -194,30 +272,34 @@
           if (ansSet.has(i)) el.classList.add('right');
           else if (sel.has(i)) el.classList.add('wrong');
         });
+        totalN++;
         Store.recordQuiz(q.id, correct);
         if (correct) rightN++; else { wrongIds.push(q.id); SRS.schedule('q:' + q.id, 0); }
-        let f = '<div class="explain"><b>' + (correct ? '✅ 回答正确' : '❌ 回答错误，正确选项：' + q.ans.map((i) => 'ABCDEF'[i]).join('')) + '</b><br>' + U.esc(q.exp) + '</div>';
+        let f = '<div class="explain"><b>' + (correct ? '✅ Correct' : '❌ 正确选项：' + q.ans.map((i) => 'ABCDEF'[i]).join('')) + '</b><br>' + U.esc(q.exp) + '</div>';
         if (correct) {
-          f += '<div class="small muted" style="margin-bottom:8px">心里没底？可以加入复习队列巩固：</div>' +
-            '<div class="btn-row"><button class="btn btn-ghost btn-sm" id="q-hard">加入复习</button>' +
-            '<button class="btn" id="q-next">' + (cur + 1 < list.length ? '下一题' : '查看结果') + '</button></div>';
+          f += '<div class="btn-row">' + (q.kp ? '<span class="quiz-meta" style="align-self:center">' + U.esc(q.kp) + '</span>' : '') +
+            '<button class="btn btn-ghost btn-sm" id="q-hard">加入复习</button>' +
+            '<button class="btn" id="q-next" style="flex:1">' + (hasNext() ? '下一题' : '查看结果') + '</button></div>';
         } else {
           f += '<div class="grade-row"><button class="btn btn-ghost" data-g="0">完全忘了</button>' +
             '<button class="btn btn-ghost" data-g="1">有点模糊</button>' +
             '<button class="btn" data-g="2">下次不会错</button></div>';
         }
         foot.innerHTML = f;
-        U.$('#q-next', foot) && U.$('#q-next', foot).addEventListener('click', next);
+        U.$('#q-next', foot) && U.$('#q-next', foot).addEventListener('click', finishItemOrNext);
         U.$('#q-hard', foot) && U.$('#q-hard', foot).addEventListener('click', (e) => {
           SRS.schedule('q:' + q.id, 1);
           e.target.textContent = '已加入 ✓'; e.target.disabled = true;
         });
         U.$$('.grade-row [data-g]', foot).forEach((b) => b.addEventListener('click', () => {
-          // 答错时已按"忘了"入队，这里按自评难度重排
           SRS.schedule('q:' + q.id, +b.dataset.g);
-          next();
+          finishItemOrNext();
         }));
         window.scrollTo(0, document.body.scrollHeight);
+      }
+      function hasNext() {
+        if (it.kind === 'set') return sub + 1 < totalInItem || idx + 1 < items.length;
+        return idx + 1 < items.length;
       }
 
       opts.forEach((el) => {
@@ -227,7 +309,8 @@
           if (multi) {
             if (sel.has(i)) { sel.delete(i); el.classList.remove('sel'); }
             else { sel.add(i); el.classList.add('sel'); }
-            renderFootBtn();
+            foot.innerHTML = '<button class="btn btn-block" id="q-ok" ' + (sel.size ? '' : 'disabled') + '>确认答案</button>';
+            U.$('#q-ok', foot).addEventListener('click', submit);
           } else {
             sel.clear(); sel.add(i);
             opts.forEach((o) => o.classList.remove('sel'));
@@ -236,55 +319,45 @@
           }
         });
       });
-      function renderFootBtn() {
-        foot.innerHTML = '<button class="btn btn-block" id="q-ok" ' + (sel.size ? '' : 'disabled') + '>确认答案</button>';
+      if (multi) {
+        foot.innerHTML = '<button class="btn btn-block" id="q-ok" disabled>确认答案</button>';
         U.$('#q-ok', foot).addEventListener('click', submit);
-      }
-      if (multi) renderFootBtn();
-
-      function next() {
-        cur++;
-        if (cur < list.length) renderQ();
-        else renderEnd();
       }
     }
 
     function renderEnd() {
-      const pct = Math.round(rightN / list.length * 100);
+      const pct = totalN ? Math.round(rightN / totalN * 100) : 0;
       let h = '<h2 class="view-title">本组成绩</h2><div class="card" style="text-align:center">' +
-        '<div style="font-size:2.4rem;font-weight:800;color:' + (pct >= 80 ? 'var(--ok)' : pct >= 60 ? 'var(--warn)' : 'var(--bad)') + '">' + pct + '</div>' +
-        '<div class="muted">答对 ' + rightN + ' / ' + list.length + '</div></div>';
+        '<div style="font-size:2.4rem;font-weight:800;color:' + (pct >= 70 ? 'var(--ok)' : pct >= 50 ? 'var(--warn)' : 'var(--bad)') + '">' + pct + '</div>' +
+        '<div class="muted">答对 ' + rightN + ' / ' + totalN + (items.some((i) => i.kind === 'set') ? ' · 含案例题' : '') + '</div></div>';
       if (wrongIds.length) {
         h += '<div class="card"><h3>本次错题（已进复习队列）</h3><div class="small muted">' +
-          wrongIds.map((id) => { const q = list.find((x) => x.id === id); return q ? '· ' + U.esc(q.kp || q.stem.slice(0, 30)) : ''; }).join('<br>') +
+          wrongIds.map((id) => { const q = qmap[id]; return q ? '· ' + U.esc(q.kp || q.stem.slice(0, 40)) : ''; }).join('<br>') +
           '</div></div>';
       }
       h += '<div class="btn-row"><a class="btn" href="#/quiz">返回题库</a><a class="btn btn-ghost" href="#/review">去复习队列</a></div>';
       view.innerHTML = h;
     }
 
-    renderQ();
+    if (items[0].kind === 'set') renderSetIntro(); else renderQ();
   };
 
   /* ---------- 复习 ---------- */
   Views.review = async function (view) {
-    const formulas = await Data.formulas(FM);
-    const quiz = await Data.quiz(FM);
+    const s = subj();
+    const formulas = await Data.formulas(s);
+    const quiz = await Data.quiz(s);
     const due = SRS.due();
     const qmap = {};
     quiz.questions.forEach((q) => { qmap[q.id] = q; });
 
     let h = '<h2 class="view-title">间隔复习</h2>';
     h += '<div class="card"><h3>📥 今日待复习：' + due.length + ' 项</h3>';
-    if (!due.length) h += '<div class="small muted">队列清空，去题库做几组新题吧。答错的题会自动按 20分钟→1天→3天→7天… 的节奏回来找你。</div>';
-    h += '</div>';
-
-    // 待复习队列（逐条渲染，答完即时移除）
-    const queueEl = document.createElement('div');
-    h += '<div id="due-queue"></div>';
-    h += '<div class="card"><h3>🃏 公式卡速记</h3><div class="small muted">点卡片翻面；按掌握程度评分，安排下次复习。</div>' +
+    if (!due.length) h += '<div class="small muted">队列清空。答错的题和标记"困难"的卡会按 20分钟→1天→3天→7天… 的节奏回来。</div>';
+    h += '</div><div id="due-queue"></div>';
+    h += '<div class="card"><h3>🃏 ' + (s === 'cfa' ? '双语术语卡 / 公式卡' : '公式卡速记') + '</h3><div class="small muted">点卡片翻面；按掌握程度评分，安排下次复习。</div>' +
       '<label class="f">选择范围</label><select id="f-ch" class="f">' +
-      '<option value="all">全部章节</option>' + formulas.decks.map((d) => '<option value="' + d.ch + '">第' + d.ch + '章 ' + U.esc(d.name) + '</option>').join('') +
+      '<option value="all">全部</option>' + formulas.decks.map((d) => '<option value="' + d.ch + '">' + U.esc(d.name) + '</option>').join('') +
       '</select><div id="f-slot"></div></div>';
     view.innerHTML = h;
 
@@ -319,18 +392,16 @@
     }
     renderDue();
 
-    // 公式卡
     const slot = U.$('#f-slot', view);
-    let deck = [];
+    let deck = [], deckIdx = 0;
     function loadDeck() {
       const v = U.$('#f-ch', view).value;
       deck = (v === 'all' ? formulas.cards : formulas.cards.filter((c) => String(c.ch) === v)).slice();
       deckIdx = 0;
       renderCard();
     }
-    let deckIdx = 0;
     function renderCard() {
-      if (!deck.length) { slot.innerHTML = '<div class="empty">该范围暂无公式卡</div>'; return; }
+      if (!deck.length) { slot.innerHTML = '<div class="empty">该范围暂无卡片</div>'; return; }
       const c = deck[deckIdx];
       slot.innerHTML = '<div class="fcard" id="fc"><div class="fcard-inner">' +
         '<div class="fcard-face fcard-front"><div class="fcard-name">' + U.esc(c.name) + '</div><div class="small muted" style="margin-top:8px">点我翻面</div></div>' +
@@ -357,11 +428,21 @@
   /* ---------- 学习计划 ---------- */
   Views.plan = async function (view) {
     const plan = await Data.plan();
+    const tracks = plan.tracks || { cpa: plan };
+    const keys = Object.keys(tracks);
+    const curKey = keys.includes(subj()) ? subj() : keys[0];
+    const track = tracks[curKey];
     const done = Store.state.data.planDone;
     const today = U.today();
-    let h = '<h2 class="view-title">备考路线图</h2>' +
-      '<div class="card small">' + U.esc(plan.overview) + '</div>';
-    for (const ph of plan.phases) {
+
+    let h = '<h2 class="view-title">备考路线图</h2>';
+    if (keys.length > 1) {
+      h += '<div class="grp-row">' + keys.map((k) =>
+        '<button class="grp-pill' + (k === curKey ? ' on' : '') + '" data-t="' + k + '">' + (k === 'cpa' ? 'CPA 2027/08' : 'CFA 二级 2027/11') + '</button>'
+      ).join('') + '</div>';
+    }
+    h += '<div class="card small">' + U.esc(track.overview) + '</div>';
+    for (const ph of track.phases) {
       h += '<div class="phase"><h3>' + U.esc(ph.name) + '</h3><div class="small muted">' + U.esc(ph.range) + ' · ' + U.esc(ph.goal) + '</div></div>';
       for (const w of ph.weeks) {
         const isDone = !!done[w.id];
@@ -373,14 +454,47 @@
           '<span class="week-no">' + U.esc(w.end.slice(5).replace('-', '/')) + '止</span></div>';
       }
     }
-    h += '<div class="card small muted" style="margin-top:14px">⏰ 里程碑：' + plan.milestones.map((m) => U.esc(m)).join('；') + '</div>';
+    h += '<div class="card small muted" style="margin-top:14px">⏰ 里程碑：' + track.milestones.map((m) => U.esc(m)).join('；') + '</div>';
     view.innerHTML = h;
-    U.$$('input[data-w]', view).forEach((cb) => cb.addEventListener('change', () => {
-      if (cb.checked) { Store.state.data.planDone[cb.dataset.w] = Date.now(); Store.touch('read'); }
-      else delete Store.state.data.planDone[cb.dataset.w];
-      Store.save();
-      cb.closest('label').querySelector('.week-task').classList.toggle('done', cb.checked);
+    U.$$('.grp-pill', view).forEach((p) => p.addEventListener('click', () => {
+      // 切换计划轨不改变当前科目
+      view.dataset.track = p.dataset.t;
+      renderTrack(p.dataset.t);
     }));
+    function renderTrack(key) {
+      const t = tracks[key];
+      const done2 = Store.state.data.planDone;
+      let hh = '<h2 class="view-title">备考路线图</h2>' +
+        '<div class="grp-row">' + keys.map((k) =>
+          '<button class="grp-pill' + (k === key ? ' on' : '') + '" data-t="' + k + '">' + (k === 'cpa' ? 'CPA 2027/08' : 'CFA 二级 2027/11') + '</button>'
+        ).join('') + '</div>' +
+        '<div class="card small">' + U.esc(t.overview) + '</div>';
+      for (const ph of t.phases) {
+        hh += '<div class="phase"><h3>' + U.esc(ph.name) + '</h3><div class="small muted">' + U.esc(ph.range) + ' · ' + U.esc(ph.goal) + '</div></div>';
+        for (const w of ph.weeks) {
+          const isDone = !!done2[w.id];
+          const isNow = w.start <= today && today <= w.end;
+          hh += '<div class="week-row">' +
+            '<label style="display:flex;gap:8px;align-items:flex-start;flex:1">' +
+            '<input type="checkbox" data-w="' + w.id + '" ' + (isDone ? 'checked' : '') + ' style="margin-top:5px;width:16px;height:16px">' +
+            '<span class="week-task' + (isDone ? ' done' : '') + '">' + (isNow ? '👉 ' : '') + U.esc(w.label) + '</span></label>' +
+            '<span class="week-no">' + U.esc(w.end.slice(5).replace('-', '/')) + '止</span></div>';
+        }
+      }
+      hh += '<div class="card small muted" style="margin-top:14px">⏰ 里程碑：' + t.milestones.map((m) => U.esc(m)).join('；') + '</div>';
+      view.innerHTML = hh;
+      U.$$('.grp-pill', view).forEach((p) => p.addEventListener('click', () => renderTrack(p.dataset.t)));
+      bindChecks();
+    }
+    function bindChecks() {
+      U.$$('input[data-w]', view).forEach((cb) => cb.addEventListener('change', () => {
+        if (cb.checked) { Store.state.data.planDone[cb.dataset.w] = Date.now(); Store.touch('read'); }
+        else delete Store.state.data.planDone[cb.dataset.w];
+        Store.save();
+        cb.closest('label').querySelector('.week-task').classList.toggle('done', cb.checked);
+      }));
+    }
+    bindChecks();
   };
 
   /* ---------- 我的 / 设置 ---------- */
@@ -398,7 +512,7 @@
         '<pre class="formula" style="text-align:left;white-space:pre-wrap;font-size:.75rem">create table cpa_state (\n  id uuid primary key references auth.users,\n  payload jsonb not null default \'{}\'::jsonb,\n  updated_at timestamptz not null default now()\n);\nalter table cpa_state enable row level security;\ncreate policy "own only" on cpa_state\n  for all using (auth.uid() = id) with check (auth.uid() = id);</pre></details>' +
         '<button class="btn btn-block" id="sp-save">保存并启用云同步</button>';
     } else if (!st.user) {
-      h += '<div class="small muted" style="margin-bottom:8px">云同步已配置，登录后自动同步。</div>' +
+      h += '<div class="small muted" style="margin-bottom:8px">云同步已配置，登录后自动同步（CPA 与 CFA 进度共用同一账号，互不干扰）。</div>' +
         '<label class="f">邮箱</label><input class="f" id="em" type="email" placeholder="you@example.com">' +
         '<label class="f">密码（至少 6 位，新用户将自动注册）</label><input class="f" id="pw" type="password" placeholder="••••••••">' +
         '<div class="btn-row"><button class="btn" id="login">登录 / 注册</button></div>';
@@ -419,7 +533,7 @@
       '<button class="btn btn-ghost btn-sm" id="fs-dec">A−</button>' +
       '<button class="btn btn-ghost btn-sm" id="fs-inc">A＋</button></div></div>';
 
-    h += '<div class="card small muted">CPA 备考学习站 v1 · 财管内容按 2026 考纲体系编写，新教材发布后自动更新</div>';
+    h += '<div class="card small muted">CPA 备考学习站 v2 · 双科目版（CPA 财管 + CFA 二级）· 内容按最新考纲编写，考纲更新后自动热更新</div>';
     view.innerHTML = h;
 
     document.documentElement.style.fontSize = (st.data.settings.fontSize || 16) + 'px';

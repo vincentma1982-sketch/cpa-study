@@ -203,3 +203,27 @@ label.f { font-size: .85rem; color: var(--muted); display: block; margin: 8px 0 
 .empty { text-align: center; color: var(--muted); padding: 40px 0; font-size: .9rem; }
 h2.view-title { font-size: 1.15rem; margin: 6px 0 12px; }
 a.back { display: inline-block; color: var(--brand); text-decoration: none; margin-bottom: 8px; font-size: .88rem; }
+
+/* 科目切换 + 案例题 + 双语术语 */
+.grp-row { display: flex; gap: 8px; margin: 4px 0 12px; }
+.grp-pill {
+  flex: 1; padding: 9px 0; border-radius: 999px; border: 1.5px solid var(--line);
+  background: var(--card); color: var(--muted); font-size: .88rem; font-weight: 600; cursor: pointer;
+}
+.grp-pill.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+.vignette {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 16px; margin: 12px 0; font-size: .92rem; line-height: 1.85;
+  font-family: "Georgia", "Times New Roman", serif; white-space: pre-wrap;
+}
+.vignette-tag {
+  font-family: -apple-system, "PingFang SC", sans-serif; font-size: .75rem; font-weight: 700;
+  color: var(--brand); margin-bottom: 8px;
+}
+.term {
+  display: flex; gap: 12px; align-items: baseline; border: 1px solid var(--line);
+  border-left: 4px solid var(--gold); border-radius: 10px; padding: 10px 14px; margin: 8px 0;
+  background: var(--card);
+}
+.term-en { font-weight: 700; color: var(--brand); white-space: nowrap; }
+.term-cn { font-size: .88rem; color: var(--text); }
