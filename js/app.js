@@ -32,7 +32,16 @@
     },
     async boot() {
       if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-        try { await navigator.serviceWorker.register('sw.js'); } catch (e) { console.warn('SW register fail', e); }
+        try {
+          await navigator.serviceWorker.register('sw.js');
+          // 新版本 SW 接管后自动刷新一次，避免新旧外壳/数据格式混用
+          let reloaded = false;
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (reloaded) return;
+            reloaded = true;
+            location.reload();
+          });
+        } catch (e) { console.warn('SW register fail', e); }
       }
       Sync.init();
       window.addEventListener('hashchange', () => this.route());
