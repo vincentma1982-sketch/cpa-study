@@ -106,6 +106,15 @@
         : '<div class="card ch-item">' + inner + '</div>';
     }
 
+    // 考纲与准则动态入口
+    const upd = await Data.updates().catch(() => null);
+    if (upd && upd.entries && upd.entries.length) {
+      const latest = upd.entries.slice().sort((a, b) => b.date.localeCompare(a.date))[0];
+      h += '<a href="#/updates" class="card" style="text-decoration:none;color:inherit;display:block">' +
+        '<b>📰 考纲与准则动态</b>' +
+        '<div class="small muted" style="margin-top:4px">上次更新 ' + U.esc(latest.date) + '：' + U.esc(latest.title) + '</div></a>';
+    }
+
     const pending = group.subjects.filter((x) => !x.ready);
     if (pending.length) {
       h += '<div class="card small muted">📌 规划中：' + pending.map((x) => U.esc(x.name) + '（' + U.esc(x.note || '筹备中') + '）').join('；') + '</div>';
@@ -495,6 +504,35 @@
       }));
     }
     bindChecks();
+  };
+
+  /* ---------- 考纲与准则动态 ---------- */
+  Views.updates = async function (view) {
+    const data = await Data.updates();
+    const entries = (data.entries || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+    let h = '<h2 class="view-title">📰 考纲与准则动态</h2>';
+    h += '<div class="card small muted">每月 1 号自动调研：CPA 当年考纲与新教材、CFA 考纲、企业会计准则 / IFRS 重要更新。每条都附「更新前 vs 更新后」对比、对学习的影响和建议动作。来源均以官方渠道核实。</div>';
+    if (!entries.length) h += '<div class="empty">暂无动态记录，每月 1 号自动检查</div>';
+    let lastMonth = '';
+    for (const en of entries) {
+      const m = en.date.slice(0, 7);
+      if (m !== lastMonth) {
+        h += '<div class="upd-month">' + m.slice(0, 4) + ' 年 ' + (+m.slice(5)) + ' 月</div>';
+        lastMonth = m;
+      }
+      h += '<div class="card">' +
+        '<div class="upd-head"><span class="upd-cat">' + U.esc(en.category) + '</span><span class="upd-date">' + U.esc(en.date) + '</span></div>' +
+        '<div class="upd-title">' + U.esc(en.title) + '</div>' +
+        '<div class="upd-cmp">' +
+        '<div class="upd-box upd-before"><span class="upd-box-tag">更新前</span>' + U.esc(en.before) + '</div>' +
+        '<div class="upd-box upd-after"><span class="upd-box-tag">更新后</span>' + U.esc(en.after) + '</div>' +
+        '</div>' +
+        (en.impact ? '<div class="tip" style="margin:10px 0 0"><span class="tip-tag">📌 对学习的影响</span> ' + U.esc(en.impact) + '</div>' : '') +
+        (en.action ? '<div class="mnem" style="margin:10px 0 0"><span class="mnem-tag">✅ 建议动作</span> ' + U.esc(en.action) + '</div>' : '') +
+        (en.source ? '<div class="small muted" style="margin-top:8px;word-break:break-all">来源：' + U.esc(en.source) + '</div>' : '') +
+        '</div>';
+    }
+    view.innerHTML = h;
   };
 
   /* ---------- 我的 / 设置 ---------- */

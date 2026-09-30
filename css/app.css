@@ -227,3 +227,17 @@ a.back { display: inline-block; color: var(--brand); text-decoration: none; marg
 }
 .term-en { font-weight: 700; color: var(--brand); white-space: nowrap; }
 .term-cn { font-size: .88rem; color: var(--text); }
+
+/* 考纲与准则动态 */
+.upd-month { font-size: .8rem; font-weight: 700; color: var(--muted); margin: 16px 4px 8px; }
+.upd-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.upd-cat { font-size: .68rem; background: var(--chip); color: var(--brand); border-radius: 6px; padding: 2px 8px; font-weight: 600; }
+.upd-date { font-size: .72rem; color: var(--muted); }
+.upd-title { font-weight: 700; margin-bottom: 8px; }
+.upd-cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.upd-box { border-radius: 10px; padding: 10px 12px; font-size: .85rem; line-height: 1.65; }
+.upd-before { background: rgba(220,38,38,.06); border: 1px solid rgba(220,38,38,.25); }
+.upd-after { background: rgba(22,163,74,.07); border: 1px solid rgba(22,163,74,.3); }
+.upd-box-tag { display: block; font-size: .7rem; font-weight: 700; margin-bottom: 4px; }
+.upd-before .upd-box-tag { color: var(--bad); }
+.upd-after .upd-box-tag { color: var(--ok); }

@@ -26,7 +26,8 @@
     chapter(sub, id) { return this.json('data/' + sub + '/' + id + '.json'); },
     formulas(sub) { return this.json('data/' + sub + '/formulas.json'); },
     quiz(sub) { return this.json('data/' + sub + '/quiz.json'); },
-    plan() { return this.json('data/plan.json'); }
+    plan() { return this.json('data/plan.json'); },
+    updates() { return this.json('data/updates.json'); }
   };
   window.Data = Data;
 })();

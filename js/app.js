@@ -19,6 +19,7 @@
         else if (hash.startsWith('/quiz/run')) await Views.quizRun(view, new URLSearchParams(hash.split('?')[1] || ''));
         else if (hash === '/review') await Views.review(view);
         else if (hash === '/plan') await Views.plan(view);
+        else if (hash === '/updates') await Views.updates(view);
         else if (hash === '/me') await Views.me(view);
         else await Views.home(view);
       } catch (e) {

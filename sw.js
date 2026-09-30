@@ -1,5 +1,5 @@
 /* CPA 学习站 Service Worker：应用外壳 + 数据缓存，版本号更新即触发刷新 */
-const VERSION = 'cpa-v2';
+const VERSION = 'cpa-v3';
 const SHELL = [
   '.', 'index.html', 'manifest.webmanifest', 'icon.svg', 'css/app.css',
   'js/vendor/supabase.min.js', 'js/core.js', 'js/data.js', 'js/views.js', 'js/app.js'
